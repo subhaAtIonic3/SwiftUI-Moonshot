@@ -15,14 +15,14 @@ struct ContentView: View {
     @ObservedObject var showDate = ToggleViewer()
     
     func changeView() {
-        showDate.showDate = true
-        print("call changeView \(showDate.showDate)")
+        showDate.toggleView.toggle()
+        print("call changeView \(showDate.toggleView)")
     }
     
     var body: some View {
         NavigationView {
             List(missions) { mission in
-                NavigationLink(destination: MissionView(mission: mission, astronauts: self.astronauts)) {
+                NavigationLink(destination: MissionView(mission: mission, astronauts: self.astronauts, showDate: self.showDate.toggleView)) {
                     Image(mission.image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -36,8 +36,10 @@ struct ContentView: View {
                 }
             }
             .navigationBarTitle("Moonshot")
+            .navigationBarItems(trailing: Button("Change View") {
+                self.changeView()
+            })
         }
-    .onAppear(perform: changeView)
     }
 }
 
@@ -48,5 +50,5 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 class ToggleViewer: ObservableObject {
-    @Published var showDate: Bool = false
+    @Published var toggleView: Bool = false
 }
