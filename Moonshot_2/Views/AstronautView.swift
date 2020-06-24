@@ -10,7 +10,6 @@ import SwiftUI
 
 struct AstronautView: View {
     
-    //    @ObservedObject var showDate: ToggleViewer
     let astronaut: Astronaut
     let allMissions: [Mission] = Bundle.main.decode("missions.json")
     var flewMissions: [Mission] {
@@ -66,7 +65,6 @@ struct AstronautView: View {
 struct AstronautView_Previews: PreviewProvider {
     
     static let astronaut: [Astronaut] = Bundle.main.decode("astronauts.json")
-    //    static let showDate = ToggleViewer()
     
     static var previews: some View {
         AstronautView(astronaut: astronaut[0])
