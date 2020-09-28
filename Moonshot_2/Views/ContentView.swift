@@ -12,22 +12,18 @@ struct ContentView: View {
     
     let astronauts: [Astronaut] = Bundle.main.decode("astronauts.json")
     let missions: [Mission] = Bundle.main.decode("missions.json")
-    @ObservedObject var showDate = ToggleViewer()
-    
-    func changeView() {
-        showDate.toggleView.toggle()
-        print("call changeView \(showDate.toggleView)")
-    }
+    @State private var showSettingsView = false
+    @State private var showDetails = false
     
     var body: some View {
         NavigationView {
             List(missions) { mission in
-                NavigationLink(destination: MissionView(mission: mission, astronauts: self.astronauts, showDate: self.showDate.toggleView)) {
+                NavigationLink(destination: MissionView(mission: mission, astronauts: self.astronauts, showDate: self.showDetails)) {
                     Image(mission.image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 44, height: 44)
-
+                    
                     VStack(alignment: .leading) {
                         Text(mission.displayName)
                             .font(.headline)
@@ -35,10 +31,24 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationBarTitle("Moonshot")
-            .navigationBarItems(trailing: Button("Change View") {
-                self.changeView()
+            .sheet(isPresented: $showSettingsView, content: {
+                NavigationView {
+                    VStack {
+                        Section {
+                            Toggle("Show Detail", isOn: self.$showDetails)
+                                .padding()
+                        }
+                    }
+                    .navigationBarTitle("Settings")
+                }
             })
+            .navigationBarTitle("Moonshot")
+            .navigationBarItems(trailing: Button(action: {
+                self.showSettingsView.toggle()
+            }, label: {
+                Image(systemName: "gear")
+                Text("Settings")
+            }))
         }
     }
 }
@@ -49,6 +59,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-class ToggleViewer: ObservableObject {
-    @Published var toggleView: Bool = false
-}
