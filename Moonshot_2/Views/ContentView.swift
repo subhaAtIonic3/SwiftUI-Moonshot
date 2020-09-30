@@ -32,15 +32,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showSettingsView, content: {
-                NavigationView {
-                    VStack {
-                        Section {
-                            Toggle("Show Detail", isOn: self.$showDetails)
-                                .padding()
-                        }
-                    }
-                    .navigationBarTitle("Settings")
-                }
+                SettingsView(showDetails: self.$showDetails)
             })
             .navigationBarTitle("Moonshot")
             .navigationBarItems(trailing: Button(action: {
